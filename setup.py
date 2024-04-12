@@ -6,7 +6,7 @@ __version__ = "0.0.0"
 
 REPO_NAME = "Text-Summerizer-AI"
 AUTHOR_USER_NAME = "SabitCanTurunc"
-SRC_REPO = "textSummerizer"
+SRC_REPO = "textSummrizer"
 AUTHOR_EMAIL = "turuncsc@gmail.com"
 
 setuptools.setup(

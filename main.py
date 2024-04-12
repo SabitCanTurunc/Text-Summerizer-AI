@@ -1,5 +1,13 @@
+from textSummerizer.pipeline.stage_01_data_ingestion import DataIngestionTrainingPipeline
 from textSummerizer.logging import logger
 
-logger.info("welcome to our custom logging")
+STAGE_NAME = "Data Ignestion stage"
+try:
+    logger.info(f">>>>> {STAGE_NAME} started <<<<<")
+    data_ingestion_pipeline = DataIngestionTrainingPipeline()
+    data_ingestion_pipeline.main()
+    logger.info(f">>>>> {STAGE_NAME} completed <<<<<\n\nx================================x")
 
-#1.43.25
+except Exception as e:
+    logger.exception(e)
+    raise e 

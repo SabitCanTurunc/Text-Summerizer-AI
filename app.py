@@ -1,13 +1,42 @@
-import torch
+from fastapi import FastAPI
+import uvicorn
+import sys
+import os
+from fastapi.templating import Jinja2Templates
+from starlette.responses import RedirectResponse
+from fastapi.responses import Response
+from textSummerizer.pipeline.prediction import PredictionPipeline
 
-# Mevcut GPU sayısını ve adını alın
-device_count = torch.cuda.device_count()
-device_name = torch.cuda.get_device_name()
 
-print("GPU Sayısı:", device_count)
-print("GPU Adı:", device_name)
+text: str = "What is Text Summarization?"
 
-# Her GPU'nun bellek kapasitesini döngüyle alın
-for i in range(device_count):
-    gpu_properties = torch.cuda.get_device_properties(i)
-    print(f"GPU {i} Bellek Kapasitesi: {gpu_properties.total_memory / (1024**3)} GB")
+app = FastAPI()
+
+
+@app.get("/", tags=["authentication"])
+async def index():
+    return RedirectResponse(url="/docs")
+
+
+@app.get("/train")
+async def training():
+    try:
+        os.system("python main.py")
+        return Response("Training successful !!")
+
+    except Exception as e:
+        return Response(f"Error Occurred! {e}")
+
+@app.post("/predict")
+async def predict_route(text):
+    try:
+
+        obj = PredictionPipeline()
+        text = obj.predict(text)
+        return text
+    except Exception as e:
+        raise e
+    
+
+if __name__=="__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8080)
